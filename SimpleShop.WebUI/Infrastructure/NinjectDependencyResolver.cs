@@ -19,6 +19,7 @@ namespace SimpleShop.WebUI.Infrastructure
         public NinjectDependencyResolver(IKernel kernelParam)
         {
             kernel = kernelParam;
+            AddBindings();
             
         }
 
