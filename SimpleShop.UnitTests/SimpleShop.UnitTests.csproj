@@ -89,6 +89,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SimpleShop.Domain\SimpleShop.Domain.csproj">
+      <Project>{82449a0d-897d-41d0-9843-fd28807f51f4}</Project>
+      <Name>SimpleShop.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimpleShop.WebUI\SimpleShop.WebUI.csproj">
       <Project>{0C76C6C5-36AD-419D-AD84-7F0817206347}</Project>
       <Name>SimpleShop.WebUI</Name>
