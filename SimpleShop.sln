@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleShop.Domain", "SimpleShop.Domain\SimpleShop.Domain.csproj", "{82449A0D-897D-41D0-9843-FD28807F51F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleShop.WebUI", "SimpleShop.WebUI\SimpleShop.WebUI.csproj", "{0C76C6C5-36AD-419D-AD84-7F0817206347}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleShop.UnitTests", "SimpleShop.UnitTests\SimpleShop.UnitTests.csproj", "{0E28183A-48FA-4884-BE99-5E81C10CD67D}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82449A0D-897D-41D0-9843-FD28807F51F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82449A0D-897D-41D0-9843-FD28807F51F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82449A0D-897D-41D0-9843-FD28807F51F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82449A0D-897D-41D0-9843-FD28807F51F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C76C6C5-36AD-419D-AD84-7F0817206347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C76C6C5-36AD-419D-AD84-7F0817206347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C76C6C5-36AD-419D-AD84-7F0817206347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C76C6C5-36AD-419D-AD84-7F0817206347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E28183A-48FA-4884-BE99-5E81C10CD67D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E28183A-48FA-4884-BE99-5E81C10CD67D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E28183A-48FA-4884-BE99-5E81C10CD67D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E28183A-48FA-4884-BE99-5E81C10CD67D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
