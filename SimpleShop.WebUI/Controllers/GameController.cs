@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using SimpleShop.Domain.Abstract;
 using SimpleShop.Domain.Entities;
+using SimpleShop.WebUI.Models;
 
 
 namespace SimpleShop.WebUI.Controllers
@@ -22,7 +23,17 @@ namespace SimpleShop.WebUI.Controllers
         // Declaretion methods
         public ViewResult List(int page = 1)
         {
-            return View(repository.Games.OrderBy(o => o.Id).Skip((page - 1) * pageSize).Take(pageSize));
+            GamesListViewModel model = new GamesListViewModel()
+            {
+                Games = repository.Games.OrderBy(o => o.Id).Skip((page - 1) * pageSize).Take(pageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = pageSize,
+                    TotalItems = repository.Games.Count()
+                }
+            };
+            return View(model);
         }
 
 
