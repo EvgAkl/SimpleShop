@@ -30,11 +30,11 @@ namespace SimpleShop.UnitTests
             GameController controller = new GameController(mock.Object);
             controller.pageSize = 3;
             // Act
-            GamesListViewModel result = (GamesListViewModel)controller.List(2).Model;
+            GamesListViewModel result = (GamesListViewModel)controller.List(null, 2).Model;
             // Assert
             List<Game> games = result.Games.ToList();
             Assert.AreEqual(games[0].Name, "Game 4");
-            Assert.AreEqual(games[01].Name, "Game 5");
+            Assert.AreEqual(games[1].Name, "Game 5");
         } // end Can_Paginate()
 
 
@@ -73,7 +73,7 @@ namespace SimpleShop.UnitTests
             GameController controller = new GameController(mock.Object);
             controller.pageSize = 3;
             // Act
-            GamesListViewModel result = (GamesListViewModel)controller.List(2).Model;
+            GamesListViewModel result = (GamesListViewModel)controller.List(null, 2).Model;
             // Assert
             PagingInfo pageInfo = result.PagingInfo;
             Assert.AreEqual(pageInfo.CurrentPage, 2);
@@ -81,6 +81,34 @@ namespace SimpleShop.UnitTests
             Assert.AreEqual(pageInfo.TotalItems, 5);
             Assert.AreEqual(pageInfo.totalPages, 2);
         } // end Can_Send_Paginate_View_Model()
+
+        [TestMethod]
+        public void Can_Filter_Games()
+        {
+            //Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game>
+            {
+                new Game { Id = 1, Name = "Game 1", Category="Cat1" },
+                new Game { Id = 2, Name = "Game 2", Category="Cat2" },
+                new Game { Id = 3, Name = "Game 3", Category="Cat1" },
+                new Game { Id = 4, Name = "Game 4", Category="Cat2" },
+                new Game { Id = 5, Name = "Game 5", Category="Cat3" }
+            });
+            GameController controller = new GameController(mock.Object);
+            controller.pageSize = 3;
+            // Act
+            List<Game> result = ((GamesListViewModel)controller.List("Cat2", 1).Model).Games.ToList();
+            // Assert
+            Assert.AreEqual(result.Count(), 2);
+            Assert.IsTrue(result[0].Name == "Game 2" && result[0].Category == "Cat2");
+            Assert.IsTrue(result[1].Name == "Game 4" && result[1].Category == "Cat2");
+        }
+
+
+
+
+
 
 
 

@@ -21,17 +21,18 @@ namespace SimpleShop.WebUI.Controllers
             repository = repo;
         }
         // Declaretion methods
-        public ViewResult List(int page = 1)
+        public ViewResult List(string category, int page = 1)
         {
             GamesListViewModel model = new GamesListViewModel()
             {
-                Games = repository.Games.OrderBy(o => o.Id).Skip((page - 1) * pageSize).Take(pageSize),
+                Games = repository.Games.Where(w => category == null || w.Category == category).OrderBy(o => o.Id).Skip((page - 1) * pageSize).Take(pageSize),
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = pageSize,
                     TotalItems = repository.Games.Count()
-                }
+                },
+                CurrentCategory = category
             };
             return View(model);
         }
