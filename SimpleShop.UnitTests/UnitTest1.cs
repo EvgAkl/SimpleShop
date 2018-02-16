@@ -103,9 +103,28 @@ namespace SimpleShop.UnitTests
             Assert.AreEqual(result.Count(), 2);
             Assert.IsTrue(result[0].Name == "Game 2" && result[0].Category == "Cat2");
             Assert.IsTrue(result[1].Name == "Game 4" && result[1].Category == "Cat2");
-        }
+        } // end Can_Filter_Games()
 
+        public void Can_Create_Categories()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game> {
+                new Game { Id = 1, Name = "Game 1", Category = "Симулятор" },
+                new Game { Id = 2, Name = "Game 2", Category = "Симулятор" },
+                new Game { Id = 3, Name = "Game 3", Category = "Шутер" },
+                new Game { Id = 4, Name = "Game 4", Category = "GPG" }
+            });
 
+            NavController target = new NavController(mock.Object);
+            // Act
+            List<string> result = ((IEnumerable<string>)target.Menu().Model).ToList();
+            // Assert
+            Assert.AreEqual(result.Count(), 3);
+            Assert.AreEqual(result[0], "RPG");
+            Assert.AreEqual(result[1], "Симулятор");
+            Assert.AreEqual(result[2], "Шутер");
+        } // end Can_Create_Categories()
 
 
 

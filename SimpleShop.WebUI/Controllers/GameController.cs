@@ -12,15 +12,15 @@ namespace SimpleShop.WebUI.Controllers
 {
     public class GameController : Controller
     {
-        // Declaretion variables
+        // Declaring variables
         private IGameRepository repository;
         public int pageSize = 4;
-        // Decalretion constructors
+        // Declaring constructors
         public GameController(IGameRepository repo)
         {
             repository = repo;
         }
-        // Declaretion methods
+        // Declaring methods
         public ViewResult List(string category, int page = 1)
         {
             GamesListViewModel model = new GamesListViewModel()
