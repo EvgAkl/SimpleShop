@@ -13,17 +13,43 @@ namespace SimpleShop.WebUI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Show full pages full categories
+            routes.MapRoute(
+                name: null,
+                url: "",
+                defaults: new { controller = "Game", action = "List", category = (string)null, page = 1 }
+                );
+
+            // Transition by pages
             routes.MapRoute(
                 name: null,
                 url: "Page{page}",
-                defaults: new { controller = "Game", action = "List" }
+                defaults: new { controller = "Game", action = "List", category = (string)null },
+                constraints: new { page = @"\d+" }
                 );
 
+            // Transition by categories
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Game", action = "List", id = UrlParameter.Optional }
-            );
-        }
-    }
-}
+                name: null,
+                url: "{category}",
+                defaults: new { controller = "Game", action = "List"}
+                );
+
+            // Transition by category pages
+            routes.MapRoute(
+                name: null,
+                url: "{category}/Page{page}",
+                defaults: new { controller = "Game", action = "List" },
+                constraints: new { page = @"\d+" }
+                );
+
+            // Default
+            routes.MapRoute(
+                name: null,
+                url: "{controller}/{action}"
+                );
+
+        } // end RegisterRoutes()
+
+    } // end class
+} // end namespace
