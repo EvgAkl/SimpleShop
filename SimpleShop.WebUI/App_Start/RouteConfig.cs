@@ -39,7 +39,7 @@ namespace SimpleShop.WebUI
             routes.MapRoute(
                 name: null,
                 url: "{category}/Page{page}",
-                defaults: new { controller = "Game", action = "List" },
+                defaults: new { controller = "Game", action = "List"},
                 constraints: new { page = @"\d+" }
                 );
 

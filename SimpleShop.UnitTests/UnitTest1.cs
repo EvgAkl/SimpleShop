@@ -126,7 +126,23 @@ namespace SimpleShop.UnitTests
             Assert.AreEqual(result[2], "Шутер");
         } // end Can_Create_Categories()
 
+        [TestMethod]
+        public void Indicates_Selected_Category()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new Game[]{
+                new Game { Id = 1, Name = "Game 1", Category = "Симулятор" },
+                new Game { Id = 2, Name = "Game 2", Category = "Шутер" }
+            });
 
+            NavController target = new NavController(mock.Object);
+            string categoryToSelect = "Шутер";
+            // Act
+            string result = target.Menu(categoryToSelect).ViewBag.SelectedCategory;
+            // Assert
+            Assert.AreEqual(categoryToSelect, result); 
+        } // end Indicates_Selected_Category()
 
 
 
