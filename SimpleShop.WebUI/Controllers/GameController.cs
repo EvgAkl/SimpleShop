@@ -30,7 +30,9 @@ namespace SimpleShop.WebUI.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = pageSize,
-                    TotalItems = repository.Games.Count()
+                    TotalItems = (category == null) ? 
+                        repository.Games.Count() :
+                        repository.Games.Where(w => w.Category == category).Count()
                 },
                 CurrentCategory = category
             };

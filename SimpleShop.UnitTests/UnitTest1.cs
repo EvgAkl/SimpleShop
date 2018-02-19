@@ -79,7 +79,7 @@ namespace SimpleShop.UnitTests
             Assert.AreEqual(pageInfo.CurrentPage, 2);
             Assert.AreEqual(pageInfo.ItemsPerPage, 3);
             Assert.AreEqual(pageInfo.TotalItems, 5);
-            Assert.AreEqual(pageInfo.totalPages, 2);
+            Assert.AreEqual(pageInfo.TotalPages, 2);
         } // end Can_Send_Paginate_View_Model()
 
         [TestMethod]
@@ -143,6 +143,37 @@ namespace SimpleShop.UnitTests
             // Assert
             Assert.AreEqual(categoryToSelect, result); 
         } // end Indicates_Selected_Category()
+
+        [TestMethod]
+        public void Generate_Category_Specific_Game_Count()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game>{
+                new Game { Id = 1, Name = "Game 1", Category = "Cat1" },
+                new Game { Id = 2, Name = "Game 2", Category = "Cat2" },
+                new Game { Id = 3, Name = "Game 3", Category = "Cat1" },
+                new Game { Id = 4, Name = "Game 4", Category = "Cat2" },
+                new Game { Id = 5, Name = "Game 5", Category = "Cat3" }
+            });
+
+            GameController controller = new GameController(mock.Object);
+            controller.pageSize = 3;
+            // Act
+            int res1 = ((GamesListViewModel)controller.List("Cat1").Model).PagingInfo.TotalItems;
+            int res2 = ((GamesListViewModel)controller.List("Cat2").Model).PagingInfo.TotalItems;
+            int res3 = ((GamesListViewModel)controller.List("Cat3").Model).PagingInfo.TotalItems;
+            int resAll = ((GamesListViewModel)controller.List(null).Model).PagingInfo.TotalItems;
+            // Assert
+            Assert.AreEqual(res1, 2);
+            Assert.AreEqual(res2, 2);
+            Assert.AreEqual(res3, 1);
+            Assert.AreEqual(resAll, 5);
+        } // end Generate_Category_Specific_Game_Count()
+
+
+
+
 
 
 
