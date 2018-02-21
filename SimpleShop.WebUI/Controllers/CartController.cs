@@ -16,45 +16,33 @@ namespace SimpleShop.WebUI.Controllers
             repository = repo;
         }
         // Declaring methods
-        public ViewResult Index(string returnUrl)
+        public ViewResult Index(Cart cart, string returnUrl)
         {
             return View(new CartIndexViewModel
             {
-                Cart = GetCart(),
+                Cart = cart,
                 ReturnUrl = returnUrl
             });
         } // end Index()
 
-        public Cart GetCart()
-        {
-            Cart cart = (Cart)Session["Cart"];
-
-            if (cart == null)
-            {
-                cart = new Cart();
-                Session["Cart"] = cart;
-            }
-            return cart;
-        } // end GetCart()
-
-        public RedirectToRouteResult AddToCart(int Id, string returnUrl)
+        public RedirectToRouteResult AddToCart(Cart cart, int Id, string returnUrl)
         {
             Game game = repository.Games.FirstOrDefault(s => s.Id == Id);
 
             if (game != null)
             {
-                GetCart().AddItem(game, 1);
+                cart.AddItem(game, 1);
             }
             return RedirectToAction("Index", new { returnUrl });
         } // end AddToCart()
 
-        public RedirectToRouteResult RemoveFromCart(int Id, string returnUrl)
+        public RedirectToRouteResult RemoveFromCart(Cart cart, int Id, string returnUrl)
         {
             Game game = repository.Games.FirstOrDefault(s => s.Id == Id);
 
             if (game != null)
             {
-                GetCart().RemoveLine(game);
+                cart.RemoveLine(game);
             }
             return RedirectToAction("Index", new { returnUrl });
         } // end RemoveFromCart()

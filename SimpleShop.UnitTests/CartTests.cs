@@ -1,14 +1,22 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleShop.Domain.Entities;
+using SimpleShop.Domain.Abstract;
+using SimpleShop.WebUI.Controllers;
+using SimpleShop.WebUI.Models;
+using Moq;
 
 namespace SimpleShop.UnitTests
 {
     [TestClass]
     public class CartTests
     {
+        // =============================================================
+        // Cart Entity tests
+        // =============================================================
         [TestMethod]
         public void Can_add_New_Lines()
         {
@@ -81,6 +89,59 @@ namespace SimpleShop.UnitTests
             // Assert
             Assert.AreEqual(cart.Lines.Count(), 0);
         } // end Can_Clear_Contents()
+
+        // =============================================================
+        // CartController tests
+        // =============================================================
+
+        [TestMethod]
+        public void Can_Add_To_Cart()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game> {
+                new Game { Id = 1, Name = "Game 1", Category = "Cat1" }
+            }.AsQueryable());
+
+            Cart cart = new Cart();
+            CartController controller = new CartController(mock.Object);
+            // Act
+            controller.AddToCart(cart, 1, null);
+            // Assert
+            Assert.AreEqual(cart.Lines.Count(), 1);
+            Assert.AreEqual(cart.Lines.ToList()[0].Game.Id, 1);
+        } // end Can_Add_To_Cart()
+
+        [TestMethod]
+        public void Adding_Game_To_Cart_Screed()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game> {
+                new Game { Id = 1, Name = "Game 1", Category = "Kat1" }
+            }.AsQueryable());
+
+            Cart cart = new Cart();
+            CartController controller = new CartController(mock.Object);
+            // Act
+            RedirectToRouteResult result = controller.AddToCart(cart, 2, "myUrl");
+            // Assert
+            Assert.AreEqual(result.RouteValues["action"], "Index");
+            Assert.AreEqual(result.RouteValues["returnUrl"], "myUrl");
+        } // end Adding_Game_To_Cart_Screed()
+
+        [TestMethod]
+        public void Can_View_Cart_Contents()
+        {
+            // Arrange
+            Cart cart = new Cart();
+            CartController target = new CartController(null);
+            // Act
+            CartIndexViewModel result = (CartIndexViewModel)target.Index(cart, "myUrl").ViewData.Model;
+            // Assert
+            Assert.AreSame(result.Cart, cart);
+            Assert.AreEqual(result.ReturnUrl, "myUrl");
+        } // end Can_View_Cart_Contents()
 
     } // end class
 
