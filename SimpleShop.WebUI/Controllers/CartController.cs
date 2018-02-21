@@ -25,6 +25,11 @@ namespace SimpleShop.WebUI.Controllers
             });
         } // end Index()
 
+        public PartialViewResult Summary(Cart cart)
+        {
+            return PartialView(cart);
+        } // end Summary()
+
         public RedirectToRouteResult AddToCart(Cart cart, int Id, string returnUrl)
         {
             Game game = repository.Games.FirstOrDefault(s => s.Id == Id);
