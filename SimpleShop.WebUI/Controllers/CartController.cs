@@ -30,6 +30,11 @@ namespace SimpleShop.WebUI.Controllers
             return PartialView(cart);
         } // end Summary()
 
+        public ViewResult Checkout(Cart cart, ShipingDetails shipingDetails)
+        {
+            return View(new ShipingDetails());
+        } // end Checkout()
+
         public RedirectToRouteResult AddToCart(Cart cart, int Id, string returnUrl)
         {
             Game game = repository.Games.FirstOrDefault(s => s.Id == Id);

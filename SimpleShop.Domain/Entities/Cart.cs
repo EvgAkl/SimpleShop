@@ -13,27 +13,27 @@ namespace SimpleShop.Domain.Entities
     public class Cart
     {
         private List<CartLine> lineCollection = new List<CartLine>();
-        public void AddItem(Game inGame, int inQuantity)
+        public void AddItem(Game game, int quantity)
         {
-            CartLine line = lineCollection.Where(g => g.Game.Id == inGame.Id).FirstOrDefault();
+            CartLine line = lineCollection.Where(g => g.Game.Id == game.Id).FirstOrDefault();
 
             if (line == null)
             {
                 lineCollection.Add(new CartLine
                 {
-                    Game = inGame,
-                    Quantity = inQuantity
+                    Game = game,
+                    Quantity = quantity
                 });
             }
             else
             {
-                line.Quantity += inQuantity;
+                line.Quantity += quantity;
             }
         } // end  AddItem()
 
-        public void RemoveLine(Game inGame)
+        public void RemoveLine(Game game)
         {
-            lineCollection.RemoveAll(r => r.Game.Id == inGame.Id);
+            lineCollection.RemoveAll(r => r.Game.Id == game.Id);
         } // end RemoveLine()
 
         public decimal ComputeTotalValue()
