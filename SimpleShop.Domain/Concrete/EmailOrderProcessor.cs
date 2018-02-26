@@ -76,7 +76,7 @@ namespace SimpleShop.Domain.Concrete
                     mailMessage.BodyEncoding = Encoding.UTF8;
                 }
 
-                smtpClient.Send(mailMessage);
+                //smtpClient.Send(mailMessage); <============================== Don't work !!!
 
             } // end using
 
