@@ -10,10 +10,12 @@ namespace SimpleShop.WebUI.Controllers
     {
         // Declaring variable
         private IGameRepository repository;
+        private IOrderProcessor orderProcessor;
         // Declaring constructors
-        public CartController(IGameRepository repo)
+        public CartController(IGameRepository repo, IOrderProcessor processor)
         {
             repository = repo;
+            orderProcessor = processor;
         }
         // Declaring methods
         public ViewResult Index(Cart cart, string returnUrl)
@@ -30,9 +32,30 @@ namespace SimpleShop.WebUI.Controllers
             return PartialView(cart);
         } // end Summary()
 
-        public ViewResult Checkout(Cart cart, ShipingDetails shipingDetails)
+        public ViewResult Checkout()
         {
             return View(new ShipingDetails());
+        }
+
+        [HttpPost]
+        public ViewResult Checkout(Cart cart, ShipingDetails shipingDetails)
+        {
+            if (cart.Lines.Count() == 0)
+            {
+                ModelState.AddModelError("", "Извините, ваша корзина пуста!");
+            }
+
+            if (ModelState.IsValid)
+            {
+                orderProcessor.ProcessOrder(cart, shipingDetails);
+                cart.Clear();
+                return View("Completed");
+            }
+            else
+            {
+                return View(shipingDetails);
+            }
+
         } // end Checkout()
 
         public RedirectToRouteResult AddToCart(Cart cart, int Id, string returnUrl)

@@ -104,7 +104,7 @@ namespace SimpleShop.UnitTests
             }.AsQueryable());
 
             Cart cart = new Cart();
-            CartController controller = new CartController(mock.Object);
+            CartController controller = new CartController(mock.Object, null);
             // Act
             controller.AddToCart(cart, 1, null);
             // Assert
@@ -116,13 +116,13 @@ namespace SimpleShop.UnitTests
         public void Adding_Game_To_Cart_Screed()
         {
             // Arrange
-            Mock<IGameRepository> mock = new Mock<IGameRepository>();
-            mock.Setup(m => m.Games).Returns(new List<Game> {
+            Mock<IGameRepository> mock1 = new Mock<IGameRepository>();
+            mock1.Setup(m => m.Games).Returns(new List<Game> {
                 new Game { Id = 1, Name = "Game 1", Category = "Kat1" }
             }.AsQueryable());
 
             Cart cart = new Cart();
-            CartController controller = new CartController(mock.Object);
+            CartController controller = new CartController(mock1.Object, null);
             // Act
             RedirectToRouteResult result = controller.AddToCart(cart, 2, "myUrl");
             // Assert
@@ -135,13 +135,79 @@ namespace SimpleShop.UnitTests
         {
             // Arrange
             Cart cart = new Cart();
-            CartController target = new CartController(null);
+            CartController target = new CartController(null, null);
             // Act
             CartIndexViewModel result = (CartIndexViewModel)target.Index(cart, "myUrl").ViewData.Model;
             // Assert
             Assert.AreSame(result.Cart, cart);
             Assert.AreEqual(result.ReturnUrl, "myUrl");
         } // end Can_View_Cart_Contents()
+
+        [TestMethod]
+        public void Cannot_Checkout_Empty_Cart()
+        {
+            // Arrange
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            Cart cart = new Cart();
+            ShipingDetails shippingDetails = new ShipingDetails();
+
+            CartController controller = new CartController(null, mock.Object);
+            // Act
+            ViewResult result = controller.Checkout(cart, shippingDetails);
+            // Assert
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShipingDetails>()), Times.Never()); // order not received 
+            Assert.AreEqual("", result.ViewName); // show default view
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        } // end Cannot_Checkout_Empty_Cart()
+
+        [TestMethod]
+        public void Cannot_Checkout_Invalid_ShippingDetails()
+        {
+            // Arrange
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            Cart cart = new Cart();
+            cart.AddItem(new Game(), 1);
+
+            CartController controller = new CartController(null, mock.Object);
+            controller.ModelState.AddModelError("error", "error");
+            // Act
+            ViewResult result = controller.Checkout(cart, new ShipingDetails());
+            // Assert
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShipingDetails>()), Times.Never());
+            Assert.AreEqual("", result.ViewName);
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        } // end Cannot_Checkout_Invalid_ShippingDetails()
+
+        [TestMethod]
+        public void Can_Checkout_And_Submit_Order()
+        {
+            // Arrange
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            Cart cart = new Cart();
+            cart.AddItem(new Game(), 1);
+
+            CartController controller = new CartController(null, mock.Object);
+            // Act
+            ViewResult result = controller.Checkout(cart, new ShipingDetails());
+            // Assert
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShipingDetails>()), Times.Once());
+            Assert.AreEqual("Completed", result.ViewName);
+            Assert.AreEqual(true, result.ViewData.ModelState.IsValid);
+        } // Can_Checkout_And_Submit_Order()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     } // end class
 
