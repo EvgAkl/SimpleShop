@@ -17,13 +17,14 @@ namespace SimpleShop.WebUI.Controllers
             repository = repo;
         }
         // Declaring methods
-        public PartialViewResult Menu(string category = null)
+        public PartialViewResult Menu(string category = null, bool horizontalNav = false)
         {
             ViewBag.SelectedCategory = category;
 
             IEnumerable<string> categories = repository.Games.Select(s => s.Category).Distinct().OrderBy(x => x);
 
-            return PartialView(categories);
+            string viewName = horizontalNav ? "MenuHorizontal" : "Menu";
+            return PartialView(viewName, categories);
         } // end Menu()
 
     } // end controller
