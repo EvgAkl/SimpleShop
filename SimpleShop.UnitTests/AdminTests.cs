@@ -36,7 +36,67 @@ namespace SimpleShop.UnitTests
             Assert.AreEqual("Game1", result[0].Name);
             Assert.AreEqual("Game2", result[1].Name);
             Assert.AreEqual("Game3", result[2].Name);
-        } // Index_Contains_All_Games()
+        } // end Index_Contains_All_Games()
+
+        [TestMethod]
+        public void Can_Edit_Game()
+        {
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game>
+            {
+                new Game { Id = 1, Name = "Game1" },
+                new Game { Id = 2, Name = "Game2" },
+                new Game { Id = 3, Name = "Game3" },
+                new Game { Id = 4, Name = "Game4" },
+                new Game { Id = 5, Name = "Game5" }
+            });
+
+            AdminController controller = new AdminController(mock.Object);
+            // Act
+            Game game1 = controller.Edit(1).ViewData.Model as Game;
+            Game game2 = controller.Edit(2).ViewData.Model as Game;
+            Game game3 = controller.Edit(3).ViewData.Model as Game;
+            // Assert
+            Assert.AreEqual(game1.Id, 1);
+            Assert.AreEqual(game2.Id, 2);
+            Assert.AreEqual(game3.Id, 3);
+        } // end Can_Edit_Game()
+
+        [TestMethod]
+        public void Cannot_Edit_Nonexistent_Game()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game>
+            {
+                new Game { Id = 1, Name = "Game1" },
+                new Game { Id = 2, Name = "Game2" },
+                new Game { Id = 3, Name = "Game3" },
+                new Game { Id = 4, Name = "Game4" },
+                new Game { Id = 5, Name = "Game5" }
+            });
+
+            AdminController controller = new AdminController(mock.Object);
+            // Act
+            Game result = (Game)controller.Edit(6).ViewData.Model;
+            // Assert
+            Assert.IsNull(result);
+        } // end Cannot_Edit_Nonexistent_Game()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     } // end class
 
