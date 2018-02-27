@@ -2,7 +2,7 @@
 @model IEnumerable<string>
 
 @{ 
-    bool horizontal = ((bool)(ViewContext.RouteData.Values["horizontalNav"] ?? false));
+    bool horizontal = (bool)(ViewContext.RouteData.Values["horizontalNav"] ?? false);
     string wrapperClasses = horizontal ? "btn-group btn-group-sm btn-group-justified " : null;
 }
 
