@@ -83,11 +83,34 @@ namespace SimpleShop.UnitTests
             Assert.IsNull(result);
         } // end Cannot_Edit_Nonexistent_Game()
 
+        [TestMethod]
+        public void Can_Save_Valid_Changes()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            AdminController controller = new AdminController(mock.Object);
+            Game game = new Game { Name = "Test" };
+            // Act
+            ActionResult result = controller.Edit(game);
+            // Assert
+            mock.Verify(m => m.SaveGame(game));
+            Assert.IsNotInstanceOfType(result, typeof(ViewResult));
+        } // end Can_Save_Valid_Changes()
 
-
-
-
-
+        [TestMethod]
+        public void Cannot_Save_Invalid_Changes()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            AdminController controller = new AdminController(mock.Object);
+            Game game = new Game { Name = "Name" };
+            controller.ModelState.AddModelError("error", "error");
+            // Act
+            ActionResult result = controller.Edit(game);
+            // Assert
+            mock.Verify(m => m.SaveGame(It.IsAny<Game>()), Times.Never());
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        } // end Cannot_Save_Invalid_Changes()
 
 
 

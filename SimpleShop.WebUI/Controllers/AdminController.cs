@@ -27,9 +27,22 @@ namespace SimpleShop.WebUI.Controllers
         {
             Game game = repository.Games.FirstOrDefault(s => s.Id == Id);
             return View(game);
-        }// end Edit()
+        }// end Edit() #1
 
-
+        [HttpPost]
+        public ActionResult Edit(Game game)
+        {
+            if (ModelState.IsValid)
+            {
+                repository.SaveGame(game);
+                TempData["message"] = string.Format("Изменения в игре \"{0}\" были сохранены ", game.Name);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(game);
+            }
+        } // end Edit() #2
 
 
 
