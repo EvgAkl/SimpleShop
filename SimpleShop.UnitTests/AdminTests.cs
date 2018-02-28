@@ -112,13 +112,28 @@ namespace SimpleShop.UnitTests
             Assert.IsInstanceOfType(result, typeof(ViewResult));
         } // end Cannot_Save_Invalid_Changes()
 
+        [TestMethod]
+        public void Can_Delete_Valid_Games()
+        {
+            // Arrange
+            Game game = new Game { Id = 2, Name = "Game2" };
 
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game>
+            {
+                new Game { Id = 1, Name = "Game1" },
+                new Game { Id = 2, Name = "Game2" },
+                new Game { Id = 3, Name = "Game3" },
+                new Game { Id = 4, Name = "Game4" },
+                new Game { Id = 5, Name = "Game5" }
+            });
 
-
-
-
-
-
+            AdminController controller = new AdminController(mock.Object);
+            // Act
+            controller.Delete(game.Id);
+            // Assert
+            mock.Verify(m => m.DeleteGame(game.Id));
+        } // end Can_Delete_Valid_Games()
 
 
     } // end class

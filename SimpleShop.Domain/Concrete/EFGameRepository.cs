@@ -35,6 +35,16 @@ namespace SimpleShop.Domain.Concrete
             context.SaveChanges();
         } // end SaveGame()
 
+        public Game DeleteGame(int Id)
+        {
+            Game dbEntry = context.Games.Find(Id);
+            if (dbEntry != null)
+            {
+                context.Games.Remove(dbEntry);
+                context.SaveChanges();
+            }
+            return dbEntry;
+        } // end DeleteGame()
 
     } // end class
 

@@ -47,7 +47,18 @@ namespace SimpleShop.WebUI.Controllers
         public ViewResult Create()
         {
             return View("Edit", new Game());
-        }
+        } // end Create()
+
+        [HttpPost]
+        public ActionResult Delete(int Id)
+        {
+            Game deletedGame = repository.DeleteGame(Id);
+            if (deletedGame != null)
+            {
+                TempData["message"] = string.Format("Игра \"{0}\" была удалена", deletedGame.Name);
+            }
+            return RedirectToAction("Index");
+        } // end Delete()
 
 
     } // end controller
