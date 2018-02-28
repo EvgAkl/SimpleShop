@@ -44,8 +44,10 @@ namespace SimpleShop.WebUI.Controllers
             }
         } // end Edit() #2
 
-
-
+        public ViewResult Create()
+        {
+            return View("Edit", new Game());
+        }
 
 
     } // end controller
