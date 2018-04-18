@@ -8,6 +8,7 @@ using SimpleShop.Domain.Entities;
 
 namespace SimpleShop.WebUI.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         // Declaring variables
