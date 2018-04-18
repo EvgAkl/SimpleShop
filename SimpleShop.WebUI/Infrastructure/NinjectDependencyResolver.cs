@@ -6,7 +6,8 @@ using Ninject;
 using SimpleShop.Domain.Abstract;
 using SimpleShop.Domain.Entities;
 using SimpleShop.Domain.Concrete;
-
+using SimpleShop.WebUI.Infrastructure.Abstract;
+using SimpleShop.WebUI.Infrastructure.Concrete;
 
 
 namespace SimpleShop.WebUI.Infrastructure
@@ -42,6 +43,8 @@ namespace SimpleShop.WebUI.Infrastructure
             };
 
             kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>().WithConstructorArgument("settings", emailSetting);
+
+            kernel.Bind<IAuthProvider>().To<FormAuthProvider>();
 
         }
 
