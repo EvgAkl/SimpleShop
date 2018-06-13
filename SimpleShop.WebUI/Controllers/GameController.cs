@@ -37,9 +37,20 @@ namespace SimpleShop.WebUI.Controllers
                 CurrentCategory = category
             };
             return View(model);
-        }
+        } // end List()
 
-
+        public FileContentResult GetImage(int Id)
+        {
+            Game game = repository.Games.FirstOrDefault(g => g.Id == Id);
+            if (game != null)
+            {
+                return File(game.ImageData, game.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
+        } // end GetImage()
 
     } // end controller
 
